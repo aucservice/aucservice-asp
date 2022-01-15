@@ -1,0 +1,3 @@
+[submodule "aucservice-api"]
+	path = aucservice-api
+	url = https://github.com/aucservice/aucservice-api.git
