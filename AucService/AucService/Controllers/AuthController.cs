@@ -21,6 +21,9 @@ namespace AucService.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(User user)
         {
+            if (user is null)
+                return BadRequest(new { message = "Invalid User" });
+            
             var token = await _userService.Register(user);
 
             return Ok(token);
@@ -29,6 +32,9 @@ namespace AucService.Controllers
         [HttpPost]
         public async Task<IActionResult> LogIn(UserRequest request)
         {
+            if (request is null)
+                return BadRequest(new { message = "Invalid User" });
+            
             var token = await _userService.LogIn(request);
 
             return Ok(token);

@@ -9,26 +9,40 @@ namespace AucService.Controllers
     [Route("[controller]")]
     public class LotController : ControllerBase
     {
-        // Status makeBet(price, userId, lotId)
+        private readonly IBetService _betService;
 
-        // Lot getLotStatus(lotId)
-        
-        // List<Lot> getAllLots()
-        
-        // List<Lot> getUserLots(userId)
-
-        // User getUser(userId)
-        
-        private readonly IAuthService _userService;
-
-        public LotController(IAuthService userService) => _userService = userService;
+        public LotController(IBetService betService) => _betService = betService;
 
         [HttpPost]
-        public async Task<IActionResult> Register(User user)
+        public async Task<IActionResult> MakeBet(int userId, int lotId, int newPrice)
         {
-            var token = await _userService.Register(user);
+            await _betService.MakeBet(userId, lotId, newPrice);
 
-            return Ok(token);
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> getLotStatus(int lotId)
+        {
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> getAllLots()
+        {
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> getUserLots(int userId)
+        {
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> getUser(int userId)
+        {
+            
         }
     }
 }
