@@ -23,9 +23,9 @@ namespace AucService
             services.AddControllers();
 
             services.AddHttpClient<IAuthService, AuthService>();
-            services.AddScoped<IAuthService, AuthService>();
-            
             services.AddHttpClient<IBetService, BetService>();
+            
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBetService, BetService>();
 
             services.AddSwaggerGen(c =>

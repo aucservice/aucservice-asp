@@ -21,28 +21,28 @@ namespace AucService.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> getLotStatus(int lotId)
-        {
-            
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> getAllLots()
-        {
-            
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> getUserLots(int userId)
-        {
-            
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> getUser(int userId)
-        {
-            
-        }
+        // [HttpPost]
+        // public async Task<IActionResult> getLotStatus(int lotId)
+        // {
+        //     
+        // }
+        //
+        // [HttpPost]
+        // public async Task<IActionResult> getAllLots()
+        // {
+        //     
+        // }
+        //
+        // [HttpPost]
+        // public async Task<IActionResult> getUserLots(int userId)
+        // {
+        //     
+        // }
+        //
+        // [HttpPost]
+        // public async Task<IActionResult> getUser(int userId)
+        // {
+        //     
+        // }
     }
 }

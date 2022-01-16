@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AucService.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _userService;
@@ -18,6 +18,14 @@ namespace AucService.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Test()
+        {
+            var t = await _userService.TestApi();
+
+            return Ok(t);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> Register(User user)
         {
@@ -25,7 +33,7 @@ namespace AucService.Controllers
                 return BadRequest(new { message = "Invalid User" });
             
             var token = await _userService.Register(user);
-
+        
             return Ok(token);
         }
         
@@ -36,7 +44,7 @@ namespace AucService.Controllers
                 return BadRequest(new { message = "Invalid User" });
             
             var token = await _userService.LogIn(request);
-
+        
             return Ok(token);
         }
     }
