@@ -1,12 +1,13 @@
+using System;
+
 namespace AucService.Model
 {
     public class Lot
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
-        public double Price { get; set; }
-        public int OwnerId { get; set; }
-        public int MaxBetCount { get; set; }
+        public string id { get; set; }
+        public string title { get; set; }
+        public string imageUrl { get; set; }
+        public string description { get; set; }
+        public long bidding_end { get; set; }
     }
 }

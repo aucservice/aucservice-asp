@@ -6,14 +6,12 @@ namespace AucService.Services
 {
     public interface IBetService
     {
-        Task MakeBet(int price, int userId, int lotId);
+        Task MakeBid(string userName, string lotId, int amount, string token);
 
-        Task<Lot> GetLotStatus(int lotId);
+        Task<Lot> GetLot(string lotId);
 
-        Task<IEnumerable<Lot>> GetAllLots();
+        Task<Dictionary<string, Lot>> GetAllLots();
 
-        Task<IEnumerable<Lot>> GetUserLots(int userId);
-
-        Task<User> GetUser(int userId);
+        Task<UserAndLots> GetUser(string userName);
     }
 }
