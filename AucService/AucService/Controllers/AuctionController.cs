@@ -17,7 +17,7 @@ namespace AucService.Controllers
         }
 
         [HttpPost("bid")]
-        public async Task<IActionResult> MakeBid(BidReceive receive)
+        public async Task<IActionResult> MakeBid([FromBody]BidReceive receive)
         {
             await _betService.MakeBid(receive.name, receive.lotId, receive.amount, receive.token);
 

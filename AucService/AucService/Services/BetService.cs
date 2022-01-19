@@ -35,7 +35,7 @@ namespace AucService.Services
             {
                 var t = _client.PutAsync($"{BaseUri}/my_bid/{lotId}",
                     new StringContent("{\"amount\":" + $"{amount}" + "}",
-                        Encoding.UTF8,"application/json")).Result;
+                        Encoding.UTF8, "application/json")).Result;
                 await _hub.Clients.All.SendAsync("bid", userName, lotId, amount);
             }
             else
@@ -64,8 +64,8 @@ namespace AucService.Services
 
 
             var userBids = bids.Result?.Values
-                .SelectMany(x=>x.Select(y=>y.username))
-                .Where(x => x == username);
+                .SelectMany(x => x)
+                .Where(x => x.username == username);
 
             var taskLots = await GetAllLots();
 
