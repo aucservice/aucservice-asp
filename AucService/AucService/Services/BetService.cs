@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using AucService.Hubs;
 using System;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace AucService.Services
 {
@@ -26,24 +27,21 @@ namespace AucService.Services
 
         public async Task MakeBid(string userName, string lotId, int amount, string token)
         {
-            using var httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(BaseUri),
-                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", token) }
-            };
-
-            var jsonBid = await httpClient.GetAsync($"{BaseUri}/my_bid/{lotId}");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var jsonBid = await _client.GetAsync($"{BaseUri}/my_bid/{lotId}");
             var currBid = await jsonBid.Content.ReadFromJsonAsync<Bid>();
 
             if (DateTime.Now.Second - currBid?.timestamp <= 3600)
             {
-                await httpClient.PutAsJsonAsync($"{BaseUri}/my_bid/{lotId}", amount);
+                var t = _client.PutAsync($"{BaseUri}/my_bid/{lotId}",
+                    new StringContent("{\"amount\":" + $"{amount}" + "}",
+                        Encoding.UTF8,"application/json")).Result;
                 await _hub.Clients.All.SendAsync("bid", userName, lotId, amount);
             }
             else
             {
-                await _hub.Clients.All.SendAsync("bid-end", "Bets are over!!!");
-                await httpClient.DeleteAsync($"{BaseUri}/my_bid/{lotId}");
+                await _hub.Clients.All.SendAsync("bid-end", lotId);
+                await _client.DeleteAsync($"{BaseUri}/my_bid/{lotId}");
             }
         }
 
@@ -62,29 +60,27 @@ namespace AucService.Services
         public async Task<UserAndLots> GetUser(string username)
         {
             var _ = await _client.GetAsync($"{BaseUri}/bids");
-            var bids = _.Content.ReadFromJsonAsync<Dictionary<string, Bid>>();
+            var bids = _.Content.ReadFromJsonAsync<Dictionary<string, IEnumerable<Bid>>>();
 
 
-            var userBids = bids.Result?.Values.Where(x => x.username == username);
+            var userBids = bids.Result?.Values
+                .SelectMany(x=>x.Select(y=>y.username))
+                .Where(x => x == username);
 
             var taskLots = await GetAllLots();
 
             var lots = from bid in userBids
-                       join lot in taskLots.Values
-                       on bid.lot_id equals lot.id
-                       select lot;
+                join lot in taskLots.Values
+                    on bid.lot_id equals lot.id
+                select lot;
 
             return new UserAndLots { username = username, lots = lots };
         }
 
         public async Task<string> GetUsers(string token)
         {
-            using var httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(BaseUri),
-                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", token) }
-            };
-            var lots = await httpClient.GetAsync($"{BaseUri}/users");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var lots = await _client.GetAsync($"{BaseUri}/users");
             return await lots.Content.ReadAsStringAsync();
         }
     }
