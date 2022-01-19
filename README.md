@@ -1,7 +1,19 @@
+<p align="center">
+<img src="https://travis-ci.org/klugjo/hexo-autolinker.svg?branch=master">
+<img src="https://img.shields.io/amo/stars/youtube?color=dd&label=Rate&logo=ss&logoColor=ss">
+<img src="https://img.shields.io/amo/v/asd?label=version">
+<img src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103">
+<img src="https://img.shields.io/crates/d/youtube">
+ </p>
+ 
 URL = https://auc-service.herokuapp.com/swagger/index.html
 # aucservice-asp
 
-# Dockerfile
+# Описание работы [SignalR](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr)
+
+
+
+# `Dockerfile`
 
 ```Dockerfile
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
@@ -25,12 +37,12 @@ ENTRYPOINT ["dotnet", "AucService.dll"]
 CMD ["dotnet", "AucService.dll", "--server.urls", "http://+:$(PORT)"]
 ```
 
-# Make Bid
+# `Make Bid`
 
 ## Request sample
 
-```
-$ curl -X POST $URL/Auction/bid 
+```console
+curl -X POST $URL/Auction/bid 
 -H "Content-Type: application/json" 
 -d "{""name":"Roman",
       "lotId":"2",
@@ -48,19 +60,19 @@ about the new lot price and if no one offers more in a minute,
 the last user takes the lot. Otherwise, the auction continues.
 ```
 
-# Get lot by id
+# `Get lot by id`
 
 ## Request sample
 
-```
-$ curl -X GET $URL/Auction/lot?lotId=A
+```console
+curl -X GET $URL/Auction/lot?lotId=A
 ```
 
 ## Response sample
 
 200 OK:
 
-```
+```json
 {
   "id": "A",
   "title": "test lot",
@@ -70,18 +82,18 @@ $ curl -X GET $URL/Auction/lot?lotId=A
 }
 ```
 
-# Get Lots
+# `Get Lots`
 
 ## Request sample
 
-```
-$ curl -X POST $URL/lots
+```console
+curl -X POST $URL/lots
 ```
 
 ## Response samples
 
 200 OK:
-```
+```json
 {
   "2": {
     "id": "2",
@@ -113,19 +125,19 @@ $ curl -X POST $URL/lots
 }
 ```
 
-# Get User By Id and all his lots.
+# `Get User By Id and all his lots`
 
 ## Request sample
 
-```
-$ curl -X GET $URL/Auction/user?name=Roma
+```console
+curl -X GET $URL/Auction/user?name=Roma
 ```
 
 ## Response sample
 
 200 OK:
 
-```
+```json
 {
   "username": "Roma",
   "lots": [
@@ -142,19 +154,19 @@ $ curl -X GET $URL/Auction/user?name=Roma
 }
 ```
 
-# Get All Users
+# `Get All Users`
 
 ## Request sample
 
-```
-$ curl -X GET $URL/Auction/users
+```console
+curl -X GET $URL/Auction/users
 ```
 
 ## Response sample
 
 200 OK:
 
-```
+```json
 {
   "users": ["herman", "user", "Test1335678", 
     "Hhhhhhhhh", "user3", "Roma",
