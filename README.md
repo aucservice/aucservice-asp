@@ -12,12 +12,12 @@ URL = https://auc-service.herokuapp.com/swagger/index.html
 # `Functionality`
 ## `LogIn`
 <p align="center">
-  <kbd> <img src="Pics\short.gif" alt="drawing" width="300" style="border-radius:10px"\></kbd>
+  <kbd> <img src="Pics\short.gif" alt="drawing" width="250" style="border-radius:10px"\></kbd>
 </p>
 
 ## `Main`
 <p align="center">
-  <kbd> <img src="Pics\auction_demo.gif" alt="drawing" width="300" style="border-radius:10px"\></kbd>
+  <kbd> <img src="Pics\auction_demo.gif" alt="drawing" width="700" style="border-radius:10px"\></kbd>
 </p>
 
 
