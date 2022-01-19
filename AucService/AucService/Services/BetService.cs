@@ -9,6 +9,7 @@ using AucService.Hubs;
 using System;
 using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace AucService.Services
 {
@@ -28,10 +29,20 @@ namespace AucService.Services
         public async Task MakeBid(string userName, string lotId, int amount, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
             var jsonBid = await _client.GetAsync($"{BaseUri}/my_bid/{lotId}");
+            if (!jsonBid.IsSuccessStatusCode)
+            {
+                var t = _client.PutAsync($"{BaseUri}/my_bid/{lotId}",
+                    new StringContent("{\"amount\":" + $"{amount}" + "}",
+                        Encoding.UTF8, "application/json")).Result;
+                await _hub.Clients.All.SendAsync("bid", userName, lotId, amount);
+                return;
+            }
+            
             var currBid = await jsonBid.Content.ReadFromJsonAsync<Bid>();
-
-            if (DateTime.Now.Second - currBid?.timestamp <= 3600)
+            var curTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            if (curTime - currBid?.timestamp <= 60)
             {
                 var t = _client.PutAsync($"{BaseUri}/my_bid/{lotId}",
                     new StringContent("{\"amount\":" + $"{amount}" + "}",
@@ -40,7 +51,7 @@ namespace AucService.Services
             }
             else
             {
-                await _hub.Clients.All.SendAsync("bid-end", lotId);
+                await _hub.Clients.All.SendAsync("bid-end", currBid?.username, lotId);
                 await _client.DeleteAsync($"{BaseUri}/my_bid/{lotId}");
             }
         }
