@@ -16,8 +16,20 @@ namespace AucService
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    var port = Environment.GetEnvironmentVariable("PORT");
+                    if (port is not null)
+                    {
+                        webBuilder.UseKestrel();
+                        webBuilder.UseUrls($"http://+:{port}");
+                    }
+
+                    webBuilder.UseStartup<Startup>();
+                });
+        }
     }
 }

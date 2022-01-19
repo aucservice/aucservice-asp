@@ -35,7 +35,7 @@ namespace AucService.Services
             var jsonBid = await httpClient.GetAsync($"{BaseUri}/my_bid/{lotId}");
             var currBid = await jsonBid.Content.ReadFromJsonAsync<Bid>();
 
-            if (DateTime.Now.Second - currBid.timestamp <= 3600)
+            if (DateTime.Now.Second - currBid?.timestamp <= 3600)
             {
                 await httpClient.PutAsJsonAsync($"{BaseUri}/my_bid/{lotId}", amount);
                 await _hub.Clients.All.SendAsync("bid", userName, lotId, amount);
@@ -65,7 +65,7 @@ namespace AucService.Services
             var bids = _.Content.ReadFromJsonAsync<Dictionary<string, Bid>>();
 
 
-            var userBids = bids.Result.Values.Where(x => x.username == username);
+            var userBids = bids.Result?.Values.Where(x => x.username == username);
 
             var taskLots = await GetAllLots();
 
@@ -75,6 +75,17 @@ namespace AucService.Services
                        select lot;
 
             return new UserAndLots { username = username, lots = lots };
+        }
+
+        public async Task<string> GetUsers(string token)
+        {
+            using var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(BaseUri),
+                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", token) }
+            };
+            var lots = await httpClient.GetAsync($"{BaseUri}/users");
+            return await lots.Content.ReadAsStringAsync();
         }
     }
 }
