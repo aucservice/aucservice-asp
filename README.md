@@ -9,6 +9,18 @@
 URL = https://auc-service.herokuapp.com/swagger/index.html
 # aucservice-asp
 
+# `Functionality`
+## `LogIn`
+<p align="center">
+  <kbd> <img src="Pics\short.gif" alt="drawing" width="300" style="border-radius:10px"\></kbd>
+</p>
+
+## `Main`
+<p align="center">
+  <kbd> <img src="Pics\auction_demo.gif" alt="drawing" width="300" style="border-radius:10px"\></kbd>
+</p>
+
+
 # Описание работы [SignalR](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr)
 ```
 ASP.NET SignalR - это библиотека для ASP.NET разработчиков, которая упрощает добавление в приложения компонентов, 
